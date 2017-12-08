@@ -103,14 +103,17 @@ public class ConvertsWorld : IConvertsWorld
 
     IEnumerable<Point> PointsInMatrix()
     {
-        for (int x = 0; x < matrix_width; x++)
-            for (int y = 0; y < matrix_height; y++)
-                if (matrix[x, y] == 1)
-                    yield return new Point(x, y);
+        return
+            from x in Range(0, MatrixWidth)
+            from y in Range(0, MatrixHeight)
+            where matrix[x, y] == 1
+            select new Point(x, y);
     }
 
-    int matrix_width => matrix.GetLength(0);
-    int matrix_height => matrix.GetLength(1);
+    IEnumerable<int> Range(int start, int length) => Enumerable.Range(start, length);
+
+    int MatrixWidth => matrix.GetLength(0);
+    int MatrixHeight => matrix.GetLength(1);
 
     public int[,] ToMatrix(World world)
     {
