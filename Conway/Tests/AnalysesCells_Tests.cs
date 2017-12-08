@@ -3,7 +3,7 @@ using SpecsFor;
 
 namespace Conway.Tests
 {
-    class CellAnalyzer_Tests : SpecsFor<AnalysesCell>
+    class AnalysesCells_Tests : SpecsFor<AnalysesCells>
     {
         [Test]
         public void CellWithMoreThan3Neighbours_ShouldBeRemoved()

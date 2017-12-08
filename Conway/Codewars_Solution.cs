@@ -14,9 +14,7 @@ public class ConwayLife
     readonly IConvertsWorld converts_world;
     readonly IEvolvesWorld evolves_world;
 
-    public ConwayLife() : this(new ConvertsWorld(), new EvolvesWorld())
-    {
-    }
+    public ConwayLife() : this(new ConvertsWorld(), new EvolvesWorld()) { }
 
     public ConwayLife(IConvertsWorld converts_world, IEvolvesWorld evolves_world)
     {
@@ -32,17 +30,6 @@ public class ConwayLife
     }
 }
 
-public interface IConvertsWorld
-{
-    World FromMatrix(int[,] matrix);
-    int[,] ToMatrix(World world);
-}
-
-public interface IEvolvesWorld
-{
-    World Evolve(World world);
-}
-
 public class World
 {
     public HashSet<Point> Cells { get; private set; }
@@ -56,36 +43,45 @@ public class World
     {
         Cells = new HashSet<Point>(cells);
     }
+
+    public int Left   => Cells.Min(x => x.X);
+    public int Right  => Cells.Max(x => x.X);
+    public int Top    => Cells.Min(x => x.Y);
+    public int Bottom => Cells.Max(x => x.Y);
+    public int Width  => Right  - Left + 1;
+    public int Height => Bottom - Top  + 1;
 }
 
 public struct Point
 {
-    public int X;
-    public int Y;
+    public int X { get; private set; }
+    public int Y { get; private set; }
 
-    public Point(int x, int y)
-    {
-        X = x;
-        Y = y;
-    }
+    public Point(int x, int y) { X = x; Y = y; }
 
     public IEnumerable<Point> Adjacents()
     {
         yield return Move(-1, -1);
-        yield return Move(-1,  0);
+        yield return Move(-1, 0);
         yield return Move(-1, +1);
 
-        yield return Move( 0, -1);
-        yield return Move( 0, +1);
+        yield return Move(0, -1);
+        yield return Move(0, +1);
 
         yield return Move(+1, -1);
-        yield return Move(+1,  0);
+        yield return Move(+1, 0);
         yield return Move(+1, +1);
     }
 
     Point Move(int dx, int dy) => new Point(X + dx, Y + dy);
 
-    public override string ToString() => $"{X}:{Y}"; 
+    public override string ToString() => $"{X}:{Y}";
+}
+
+public interface IConvertsWorld
+{
+    World FromMatrix(int[,] matrix);
+    int[,] ToMatrix(World world);
 }
 
 public class ConvertsWorld : IConvertsWorld
@@ -125,34 +121,34 @@ public class ConvertsWorld : IConvertsWorld
 
     void WorldToMatrix()
     {
-        matrix = new int[world_width, world_height];
+        InitMatrix();
 
         foreach (var c in world.Cells)
-            SetMatrix(c.X, c.Y);
+            SetPointInMatrix(c.X, c.Y);
     }
 
-    void SetMatrix(int x, int y)
+    void InitMatrix()
     {
-        matrix[x - world_left, y - world_top] = 1;
+        matrix = new int[world.Width, world.Height];
     }
 
-    int world_left => world.Cells.Min(x => x.X); 
-    int world_right => world.Cells.Max(x => x.X); 
-    int world_top => world.Cells.Min(x => x.Y); 
-    int world_bottom => world.Cells.Max(x => x.Y); 
-    int world_width => world_right - world_left + 1;
-    int world_height => world_bottom - world_top + 1;
+    void SetPointInMatrix(int x, int y)
+    {
+        matrix[x - world.Left, y - world.Top] = 1;
+    }
 }
 
+public interface IEvolvesWorld
+{
+    World Evolve(World world);
+}
 
 public class EvolvesWorld : IEvolvesWorld
 {
     IAnalysesCells analyses_cell;
     Point[] cells;
 
-    public EvolvesWorld(): this(new AnalysesCell())
-    {
-    }
+    public EvolvesWorld() : this(new AnalysesCells()) { }
 
     public EvolvesWorld(IAnalysesCells analyses_cell)
     {
@@ -161,7 +157,7 @@ public class EvolvesWorld : IEvolvesWorld
 
     public World Evolve(World world)
     {
-        this.cells = world.Cells.ToArray();
+        cells = world.Cells.ToArray();
 
         return new World(cells.Except(ToRemove).Concat(ToCreate));
     }
@@ -176,15 +172,14 @@ public interface IAnalysesCells
     Point[] FindCellsToCreate(Point[] cells);
 }
 
-public class AnalysesCell : IAnalysesCells
+public class AnalysesCells : IAnalysesCells
 {
     Point[] cells;
 
     public Point[] FindCellsToCreate(Point[] cells)
     {
-        var adjacents = cells.SelectMany(c => c.Adjacents());
-        var outline = adjacents.Where(x => !cells.Contains(x));
-        return outline.GroupBy(x => x).Where(AreThree).Select(g => g.Key).ToArray();
+        var surrounding_points = cells.SelectMany(c => c.Adjacents()).Where(x => !cells.Contains(x));
+        return surrounding_points.GroupBy(x => x).Where(AreThree).Select(g => g.Key).ToArray();
     }
 
     static bool AreThree(IEnumerable<Point> points)
@@ -200,11 +195,11 @@ public class AnalysesCell : IAnalysesCells
 
     bool ShouldBeRemoved(Point cell)
     {
-        var n = CountNeighbours(cell);
-        return n > 3 || n < 2;
+        var n = NeighboursOf(cell);
+        return n < 2 || n > 3;
     }
 
-    int CountNeighbours(Point cell)
+    int NeighboursOf(Point cell)
     {
         return cell.Adjacents().Intersect(cells).Count();
     }

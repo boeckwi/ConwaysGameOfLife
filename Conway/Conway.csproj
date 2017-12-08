@@ -70,7 +70,7 @@
     <Compile Include="Codewars_Solution.cs" />
     <Compile Include="Codewars_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\CellAnalyzer_Tests.cs" />
+    <Compile Include="Tests\AnalysesCells_Tests.cs" />
     <Compile Include="Tests\ConwayLife_Tests.cs" />
     <Compile Include="Tests\ConvertsWorld_Tests.cs" />
     <Compile Include="Tests\EvolvesWorld_Tests.cs" />
