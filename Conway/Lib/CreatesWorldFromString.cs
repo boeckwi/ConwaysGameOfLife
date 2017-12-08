@@ -36,20 +36,15 @@ namespace Conway.Lib
             return line.Length - line.TrimStart().Length;
         }
 
-        string[] ParseLivingCells()
+        Location[] ParseLivingCells()
         {
-            List<string> list = new List<string>();
+            var list = new List<Location>();
             
             for (int y = 0; y < height; y++)
                 for (int x = 0; x < width; x++)
-                    if (CellAt(x, y)) list.Add(Cell(x, y));
+                    if (CellAt(x, y)) list.Add(new Location(x, y));
 
             return list.ToArray();
-        }
-
-        string Cell(int x, int y)
-        {
-            return String.Format("{0}:{1}", Alphabet[x], y+1);
         }
 
         bool CellAt(int x, int y)

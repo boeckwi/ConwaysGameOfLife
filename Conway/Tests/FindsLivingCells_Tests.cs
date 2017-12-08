@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Conway.Lib;
+using Conway.Values;
 using NUnit.Framework;
+using System.Linq;
+using System;
 
 namespace Conway.Tests
 {
@@ -7,9 +10,19 @@ namespace Conway.Tests
     public class FindsLivingCells_Tests
     {
         [Test]
-        public void Foo()
+        public void SingleCellWithoutNeighbours()
         {
-            Assert.Fail();
+            var SUT = new FindsLivingCells();
+            var cells = new[] { new Location("B2") };
+
+            var spaces = SUT.FindLivingCellsIn(cells);
+
+            Assert.That(spaces.Select(Print), Is.EquivalentTo("B2:0".Split()));
+        }
+
+        string Print(Cell c)
+        {
+            return c.Location.Name() + ":" + c.LivingNeighbours;
         }
     }
 }

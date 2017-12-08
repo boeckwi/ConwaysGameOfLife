@@ -1,7 +1,15 @@
+using System.Linq;
+
 namespace Conway.Values
 {
-    public class World
+    public struct World
     {
-        public string[] LivingCells { get; set; }
+        public Location[] LivingCells { get; set; }
+
+        public override string ToString()
+        {
+            if (LivingCells == null) return "";
+            return string.Join("\r\n", LivingCells.Select(x => x.Name()));
+        }
     }
 }

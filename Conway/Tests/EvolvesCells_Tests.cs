@@ -3,6 +3,7 @@ using Conway.Lib;
 using Conway.Values;
 using NUnit.Framework;
 using SpecsFor;
+using System.Linq;
 
 namespace Conway.Tests
 {
@@ -13,48 +14,57 @@ namespace Conway.Tests
         {
             var world = new World();
 
-            world.LivingCells = new[] {"A", "B"};
+            world.LivingCells = new[] {new Location("A1"),new Location("B1")};
 
             var living_cells = new []
             {
-                new Cell("A", 2), 
-                new Cell("B", 1), 
+                Cell("A1", 2), 
+                Cell("B1", 1), 
             };
 
-            var result = SUT.EvolveCells(world, new Cell[0], living_cells);
-            Assert.That(result.LivingCells, Is.EqualTo(new[] {"A"}));
+            var result = SUT.EvolveCells(world, living_cells, new Cell[0]);
+            Assert.That(result.LivingCells.Select(NameOf), Is.EqualTo(new[] {"A1"}));
+        }
+
+        Cell Cell(string location, int neighbours)
+        {
+            return new Cell(new Location(location), neighbours);
         }
 
         [Test]
         public void RemovesCellsWithMoreThanThreeNeighbours()
         {
             var world = new World();
-            world.LivingCells = new[] {"A", "B"};
+            world.LivingCells = new[] { new Location("A1"), new Location("B1")};
             var living_cells = new []
             {
-                new Cell("A", 3), 
-                new Cell("B", 4), 
+                Cell("A1", 3), 
+                Cell("B1", 4), 
             };
 
             var result = SUT.EvolveCells(world, new Cell[0], living_cells);
-            Assert.That(result.LivingCells, Is.EqualTo(new[] {"A"}));
+            Assert.That(result.LivingCells.Select(NameOf), Is.EqualTo(new[] {"A1"}));
         }
 
+        string NameOf(Location location)
+        {
+            return location.Name();
+        }
 
         [Test]
         public void CreatsCellAtSpacesWithThreeNeighbours()
         {
             var world = new World();
-            world.LivingCells = new string[0];
+            world.LivingCells = new Location[0];
             var spaces = new []
             {
-                new Cell("A", 2), 
-                new Cell("B", 3), 
-                new Cell("C", 4)
+                Cell("A1", 2), 
+                Cell("B1", 3), 
+                Cell("C1", 4)
             };
 
-            var result = SUT.EvolveCells(world, spaces, new Cell[0]);
-            Assert.That(result.LivingCells, Is.EqualTo(new[] {"B"}));
+            var result = SUT.EvolveCells(world, new Cell[0], spaces);
+            Assert.That(result.LivingCells.Select(NameOf), Is.EqualTo(new[] {"B1"}));
         }
     }
 }

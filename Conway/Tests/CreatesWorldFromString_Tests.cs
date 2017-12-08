@@ -2,6 +2,8 @@
 using Conway.Lib;
 using NUnit.Framework;
 using SpecsFor;
+using System.Linq;
+using Conway.Values;
 
 namespace Conway.Tests
 {
@@ -12,7 +14,7 @@ namespace Conway.Tests
         {
             var world = SUT.CreateWorldFrom(@"#");
 
-            Assert.That(world.LivingCells, Is.EquivalentTo("A:1".Split()));
+            Assert.That(world.LivingCells.Select(NameOf), Is.EquivalentTo("A1".Split()));
         }
 
         [Test]
@@ -23,7 +25,7 @@ namespace Conway.Tests
  #
  #
 ");
-            Assert.That(world.LivingCells, Is.EquivalentTo("A:1 B:2 B:3".Split()));
+            Assert.That(world.LivingCells.Select(NameOf), Is.EquivalentTo("A1 B2 B3".Split()));
         }
 
         [Test]
@@ -36,7 +38,12 @@ namespace Conway.Tests
      #
      #
 ");
-            Assert.That(world.LivingCells, Is.EquivalentTo("A:1 B:2 B:3".Split()));
+            Assert.That(world.LivingCells.Select(NameOf), Is.EquivalentTo("A1 B2 B3".Split()));
         }
+        string NameOf(Location c)
+        {
+            return c.Name();
+        }
+
     }
 }

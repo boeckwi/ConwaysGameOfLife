@@ -2,13 +2,18 @@ namespace Conway.Values
 {
     public class Cell
     {
-        public string Name { get; private set; }
         public int LivingNeighbours { get; private set; }
+        public Location Location { get; private set; }
 
-        public Cell(string name, int living_neighbours)
+        public Cell(Location location, int living_neighbours)
         {
-            Name = name;
+            Location = location;
             LivingNeighbours = living_neighbours;
+        }
+
+        public override string ToString()
+        {
+            return Location.Name() + ":" + LivingNeighbours;
         }
     }
 }

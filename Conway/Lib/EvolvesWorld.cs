@@ -20,7 +20,7 @@ namespace Conway.Lib
 
         public World Evolve(World world)
         {
-            return evolves_cells.EvolveCells(world, finds_living_cells.FindLivingCellsIn(world), finds_spaces_around_living_cells.FindSpacesIn(world));
+            return evolves_cells.EvolveCells(world, finds_living_cells.FindLivingCellsIn(world.LivingCells), finds_spaces_around_living_cells.FindSpacesAround(world.LivingCells));
         }
     }
 }

@@ -7,14 +7,14 @@ namespace Conway.Lib
 {
     public class EvolvesCells : IEvolvesCells
     {
-        public World EvolveCells(World world, Cell[] spaces, Cell[] living_cells)
+        public World EvolveCells(World world, Cell[] living_cells, Cell[] spaces)
         {
             var newCells = spaces.Where(HasThreeNeighbours);
             var stayAlive = living_cells.Where(HasTwoOrThreeNeighbours);
 
             return new World
             {
-                LivingCells = stayAlive.Concat(newCells).Select(NameOf).ToArray(),
+                LivingCells = stayAlive.Concat(newCells).Select(LocationOf).ToArray(),
             };
         }
 
@@ -30,9 +30,9 @@ namespace Conway.Lib
             return n == 2 || n == 3;
         }
 
-        string NameOf(Cell c)
+        Location LocationOf(Cell c)
         {
-            return c.Name;
+            return c.Location;
         }
     }
 }

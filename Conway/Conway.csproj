@@ -89,12 +89,16 @@
     <Compile Include="Tests\FindsSpacesAroundLivingCells_Tests.cs" />
     <Compile Include="Tests\IntegrationTests.cs" />
     <Compile Include="Lib\SimulatesConwayFactory.cs" />
+    <Compile Include="Values\Location.cs" />
     <Compile Include="Tests\SimulatesConway_Tests.cs" />
     <Compile Include="Values\Cell.cs" />
     <Compile Include="Values\World.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,14 +1,15 @@
 using Conway.Contracts;
 using Conway.Values;
+using System.Linq;
+using System;
 
 namespace Conway.Lib
 {
     public class FindsLivingCells : IFindsLivingCells
     {
-        public Cell[] FindLivingCellsIn(World world)
+        public Cell[] FindLivingCellsIn(Location[] cells)
         {
-            // TODO
-            throw new System.NotImplementedException();
+            return cells.Select(l => new Cell(l, l.CountNeighbours(cells))).ToArray();
         }
     }
 }

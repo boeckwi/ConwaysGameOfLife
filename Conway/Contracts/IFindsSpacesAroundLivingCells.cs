@@ -4,6 +4,6 @@ namespace Conway.Contracts
 {
     public interface IFindsSpacesAroundLivingCells
     {
-        Cell[] FindSpacesIn(World world);
+        Cell[] FindSpacesAround(Location[] living_cells);
     }
 }
