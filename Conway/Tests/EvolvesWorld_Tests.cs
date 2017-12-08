@@ -1,38 +1,33 @@
-﻿using System;
-using Conway.Contracts;
-using Conway.Lib;
-using Conway.Values;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using SpecsFor;
 
 namespace Conway.Tests
 {
-    public class EvolvesWorld_Tests : SpecsFor<EvolvesWorld>
+    class EvolvesWorld_Tests : SpecsFor<EvolvesWorld>
     {
-        Location[] existing_cells = new Location[0];
-        Cell[] spaces = new Cell[0];
-        World world;
-        Cell[] living_cells = new Cell[0];
-        World evolved_world = new World();
-        World result;
+        Point[] input_cells = new[] { new Point(1, 1), new Point(2, 2) };
+        Point[] cells_to_remove = new[] { new Point(2, 2) };
+        Point[] cells_to_create = new[] { new Point(3, 3) };
+        HashSet<Point> result;
 
         protected override void Given()
         {
-            world = new World { LivingCells = existing_cells };
-            GetMockFor<IFindsSpacesAroundLivingCells>().Setup(x => x.FindSpacesAround(existing_cells)).Returns(spaces);
-            GetMockFor<IFindsLivingCells>().Setup(x => x.FindLivingCellsIn(world.LivingCells)).Returns(living_cells);
-            GetMockFor<IEvolvesCells>().Setup(x => x.EvolveCells(world, spaces, living_cells)).Returns(evolved_world);
+            GetMockFor<IAnalysesCells>().Setup(x => x.FindCellsToCreate(input_cells)).Returns(cells_to_create);
+            GetMockFor<IAnalysesCells>().Setup(x => x.FindCellsToRemove(input_cells)).Returns(cells_to_remove);
         }
 
         protected override void When()
         {
-            result = SUT.Evolve(world);
+            var world = new World(input_cells);
+            var evolved_world = SUT.Evolve(world);
+            result = evolved_world.Cells;
         }
 
         [Test]
         public void HappyPath()
         {
-            Assert.That(result, Is.EqualTo(evolved_world));
+            Assert.That(result, Is.EqualTo(new[] { new Point(1, 1), new Point(3, 3) }));
         }
     }
 }

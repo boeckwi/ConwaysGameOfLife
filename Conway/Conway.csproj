@@ -67,32 +67,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConwayLife.cs" />
-    <Compile Include="Lib\CreatesWorldFromString.cs" />
-    <Compile Include="Lib\EvolvesCells.cs" />
-    <Compile Include="Lib\EvolvesWorld.cs" />
-    <Compile Include="Lib\FindsLivingCells.cs" />
-    <Compile Include="Lib\FindsSpacesAroundLivingCells.cs" />
-    <Compile Include="Lib\OutputsWorld.cs" />
+    <Compile Include="Codewars_Solution.cs" />
+    <Compile Include="Codewars_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Lib\SimulatesConway.cs" />
-    <Compile Include="Contracts\ICreatesWorldFromString.cs" />
-    <Compile Include="Contracts\IEvolvesWorld.cs" />
-    <Compile Include="Contracts\IOutputsWorld.cs" />
-    <Compile Include="Tests\CreatesWorldFromString_Tests.cs" />
-    <Compile Include="Tests\EvolvesCells_Tests.cs" />
+    <Compile Include="Tests\CellAnalyzer_Tests.cs" />
+    <Compile Include="Tests\ConwayLife_Tests.cs" />
+    <Compile Include="Tests\ConvertsWorld_Tests.cs" />
     <Compile Include="Tests\EvolvesWorld_Tests.cs" />
-    <Compile Include="Contracts\IEvolvesCells.cs" />
-    <Compile Include="Contracts\IFindsLivingCells.cs" />
-    <Compile Include="Contracts\IFindsSpacesAroundLivingCells.cs" />
-    <Compile Include="Tests\FindsLivingCells_Tests.cs" />
-    <Compile Include="Tests\FindsSpacesAroundLivingCells_Tests.cs" />
-    <Compile Include="Tests\IntegrationTests.cs" />
-    <Compile Include="Lib\SimulatesConwayFactory.cs" />
-    <Compile Include="Values\Location.cs" />
-    <Compile Include="Tests\SimulatesConway_Tests.cs" />
-    <Compile Include="Values\Cell.cs" />
-    <Compile Include="Values\World.cs" />
+    <Compile Include="Tests\Point_Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
