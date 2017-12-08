@@ -32,17 +32,10 @@ public class ConwayLife
 
 public class World
 {
-    public HashSet<Point> Cells { get; private set; }
+    public IEnumerable<Point> Cells { get; private set; }
 
-    public World(IEnumerable<Point> cells)
-    {
-        Cells = new HashSet<Point>(cells);
-    }
-
-    public World(params Point[] cells)
-    {
-        Cells = new HashSet<Point>(cells);
-    }
+    public World(IEnumerable<Point> cells) { Cells = cells; }
+    public World(params Point[] cells)     { Cells = cells; }
 
     public int Left   => Cells.Min(x => x.X);
     public int Right  => Cells.Max(x => x.X);
@@ -62,14 +55,14 @@ public struct Point
     public IEnumerable<Point> Adjacents()
     {
         yield return Move(-1, -1);
-        yield return Move(-1, 0);
+        yield return Move(-1,  0);
         yield return Move(-1, +1);
 
-        yield return Move(0, -1);
-        yield return Move(0, +1);
+        yield return Move( 0, -1);
+        yield return Move( 0, +1);
 
         yield return Move(+1, -1);
-        yield return Move(+1, 0);
+        yield return Move(+1,  0);
         yield return Move(+1, +1);
     }
 
@@ -115,6 +108,7 @@ public class ConvertsWorld : IConvertsWorld
     int MatrixWidth => matrix.GetLength(0);
     int MatrixHeight => matrix.GetLength(1);
 
+
     public int[,] ToMatrix(World world)
     {
         this.world = world;
@@ -148,20 +142,15 @@ public interface IEvolvesWorld
 
 public class EvolvesWorld : IEvolvesWorld
 {
-    IAnalysesCells analyses_cell;
+    readonly IAnalysesCells analyses_cell;
     Point[] cells;
 
     public EvolvesWorld() : this(new AnalysesCells()) { }
-
-    public EvolvesWorld(IAnalysesCells analyses_cell)
-    {
-        this.analyses_cell = analyses_cell;
-    }
+    public EvolvesWorld(IAnalysesCells analyses_cell) { this.analyses_cell = analyses_cell; }
 
     public World Evolve(World world)
     {
         cells = world.Cells.ToArray();
-
         return new World(cells.Except(ToRemove).Concat(ToCreate));
     }
 

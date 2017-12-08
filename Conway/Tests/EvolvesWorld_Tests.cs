@@ -9,7 +9,7 @@ namespace Conway.Tests
         Point[] input_cells = new[] { new Point(1, 1), new Point(2, 2) };
         Point[] cells_to_remove = new[] { new Point(2, 2) };
         Point[] cells_to_create = new[] { new Point(3, 3) };
-        HashSet<Point> result;
+        IEnumerable<Point> result;
 
         protected override void Given()
         {
